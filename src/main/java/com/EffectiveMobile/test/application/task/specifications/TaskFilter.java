@@ -13,8 +13,8 @@ import java.util.Map;
 @Getter
 public class TaskFilter {
 
-    Specification<Task> spec;
     final String filterParams;
+    Specification<Task> spec;
 
     public TaskFilter(Map<String, String> params) {
         spec = Specification.where(null);
