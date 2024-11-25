@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="4" author="onmyodzhi">
+        <createTable tableName="task_statuses" ifNotExists="true">
+            <column name="name" type="VARCHAR(50)">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="onmyodzhi">
+        <createTable tableName="task_priorities" ifNotExists="true">
+            <column name="name" type="VARCHAR(50)">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="6" author="onmyodzhi">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="tasks" columnName="status_name"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="tasks">
+            <column name="status_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="priority_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <comment>Add new status and priority columns to the tasks table</comment>
+    </changeSet>
+
+    <changeSet id="7" author="onmyodzhi">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="tasks" columnName="status"/>
+        </preConditions>
+        <dropColumn tableName="tasks" columnName="status"/>
+        <comment>Drop old status column from the tasks table</comment>
+    </changeSet>
+
+    <changeSet id="8" author="onmyodzhi">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="tasks" columnName="priority"/>
+        </preConditions>
+        <dropColumn tableName="tasks" columnName="priority"/>
+        <comment>Drop old priority column from the tasks table</comment>
+    </changeSet>
+
+    <changeSet id="9" author="onmyodzhi">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_tasks_statuses"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="tasks" baseColumnNames="status_name"
+                                 referencedTableName="task_statuses" referencedColumnNames="name"
+                                 constraintName="fk_tasks_statuses"/>
+        <comment>Add foreign key for status_name column in tasks table</comment>
+    </changeSet>
+
+    <changeSet id="10" author="onmyodzhi">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_tasks_priorities"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="tasks" baseColumnNames="priority_name"
+                                 referencedTableName="task_priorities" referencedColumnNames="name"
+                                 constraintName="fk_tasks_priorities"/>
+        <comment>Add foreign key for priority_name column in tasks table</comment>
+    </changeSet>
+
+</databaseChangeLog>
