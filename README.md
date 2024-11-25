@@ -33,7 +33,7 @@
 ### Шаг 1: Клонировать репозиторий
 
 ```bash
-git clone https://github.com/onmyodzhi/test-for-smart-delta-systems
+git clone https://github.com/onmyodzhi/test-for-effective-mobile
 cd your-repository-directory
 ```
 ### Шаг 2: Настройка переменных окружения
